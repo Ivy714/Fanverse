@@ -6,6 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>寫信 - Fanverse</title>
     <link rel="stylesheet" href="style.css">
+
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
+  authDomain: "fanverse-f07eb.firebaseapp.com",
+  databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
+  projectId: "fanverse-f07eb",
+  storageBucket: "fanverse-f07eb.firebasestorage.app",
+  messagingSenderId: "352855054633",
+  appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
+  measurementId: "G-NT4NL6K2Q2"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+    
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
