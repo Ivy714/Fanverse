@@ -2,6 +2,22 @@
 
 // **1. Firebase 初始化**
 // (請確保你已將 Firebase 設定程式碼放在 HTML 中，如之前的範例)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+
+// 🔧 Firebase 初始化
+const firebaseConfig = {
+  apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
+  authDomain: "fanverse-f07eb.firebaseapp.com",
+  projectId: "fanverse-f07eb",
+  storageBucket: "fanverse-f07eb.appspot.com",
+  messagingSenderId: "352855054633",
+  appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
+  measurementId: "G-NT4NL6K2Q2"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app); // ✅ 改為這行，初始化時帶入 app
+
 
 // **2. 頁面元素選取**
 // 注意：'login-btn'現在是個導航連結，不再用於JS控制彈出表單，所以移除相關的元素選取
