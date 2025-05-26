@@ -6,32 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>聊天室 - Fanverse</title>
     <link rel="stylesheet" href="style.css">
-    
+
     <script type="module">
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI", // **請確認這個 API Key 是你從 Firebase Console 複製到的**
-  authDomain: "fanverse-f07eb.firebaseapp.com",
-  databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
-  projectId: "fanverse-f07eb",
-  storageBucket: "fanverse-f07eb.firebasestorage.app",
-  messagingSenderId: "352855054633",
-  appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
-  measurementId: "G-NT4NL6K2Q2"
-};
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI", // **請確認這個 API Key 是你從 Firebase Console 複製到的**
+            authDomain: "fanverse-f07eb.firebaseapp.com",
+            databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
+            projectId: "fanverse-f07eb",
+            storageBucket: "fanverse-f07eb.firebasestorage.app",
+            messagingSenderId: "352855054633",
+            appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
+            measurementId: "G-NT4NL6K2Q2"
+        };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-</script>
-    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+
 </head>
 
 <body>
@@ -43,12 +43,10 @@ const analytics = getAnalytics(app);
                 <li><a href="write_letter.html">寫信</a></li>
                 <li><a href="chat.html">聊天室</a></li>
                 <li><a href="rankings.html">排行榜</a></li>
-                <li><a href="#" id="login-btn">登入/註冊</a></li>
+                <li><a href="login.html" id="login-nav-btn">登入/註冊</a></li>
             </ul>
         </nav>
-
-        
-    </header>
+        </header>
 
     <main>
         <section id="chat">
