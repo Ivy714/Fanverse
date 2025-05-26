@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>Fanverse 註冊測試</title>
+</head>
+<body>
+  <h1>註冊 Fanverse 帳號</h1>
+
+  <form id="register-form">
+    <label for="register-email">電子郵件：</label>
+    <input type="email" id="register-email" required><br>
+
+    <label for="register-password">密碼：</label>
+    <input type="password" id="register-password" required><br>
+
+    <button type="submit">註冊</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+
+    // Firebase 設定
+    const firebaseConfig = {
+      apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
+      authDomain: "fanverse-f07eb.firebaseapp.com",
+      projectId: "fanverse-f07eb",
+      storageBucket: "fanverse-f07eb.appspot.com",
+      messagingSenderId: "352855054633",
+      appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
+      measurementId: "G-NT4NL6K2Q2"
+    };
+
+    // 初始化 Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 取得表單並綁定事件
+    const form = document.getElementById("register-form");
+    const message = document.getElementById("message");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("register-email").value;
+      const password = document.getElementById("register-password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          message.textContent = "✅ 註冊成功！";
+          console.log("註冊成功", userCredential.user);
+        })
+        .catch((error) => {
+          message.textContent = "❌ 註冊失敗：" + error.message;
+          console.error("註冊錯誤", error);
+        });
+    });
+  </script>
+</body>
+</html>
