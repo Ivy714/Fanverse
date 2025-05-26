@@ -2,26 +2,93 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>Fanverse 註冊測試</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登入 / 註冊 - Fanverse</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background: #f3f3f3;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.7rem;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    p {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    a {
+      color: #4a90e2;
+      cursor: pointer;
+    }
+    #message {
+      text-align: center;
+      margin-top: 1rem;
+      color: red;
+    }
+  </style>
 </head>
 <body>
-  <h1>註冊 Fanverse 帳號</h1>
 
-  <form id="register-form">
-    <label for="register-email">電子郵件：</label>
-    <input type="email" id="register-email" required><br>
+  <h1>Fanverse 登入 / 註冊</h1>
 
-    <label for="register-password">密碼：</label>
-    <input type="password" id="register-password" required><br>
+  <!-- 登入表單 -->
+  <form id="login-form">
+    <h2>登入</h2>
+    <label for="login-email">電子郵件</label>
+    <input type="email" id="login-email" required>
+    <label for="login-password">密碼</label>
+    <input type="password" id="login-password" required>
+    <button type="submit">登入</button>
+    <p>還沒有帳號？<a id="show-register">註冊</a></p>
+  </form>
 
+  <!-- 註冊表單 -->
+  <form id="register-form" style="display: none;">
+    <h2>註冊</h2>
+    <label for="register-email">電子郵件</label>
+    <input type="email" id="register-email" required>
+    <label for="register-password">密碼</label>
+    <input type="password" id="register-password" required>
     <button type="submit">註冊</button>
+    <p>已有帳號？<a id="show-login">登入</a></p>
   </form>
 
   <p id="message"></p>
 
   <script type="module">
+    // Firebase SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
 
     // Firebase 設定
     const firebaseConfig = {
@@ -38,23 +105,63 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // 取得表單並綁定事件
-    const form = document.getElementById("register-form");
+    // 元素
+    const loginForm = document.getElementById("login-form");
+    const registerForm = document.getElementById("register-form");
+    const showRegister = document.getElementById("show-register");
+    const showLogin = document.getElementById("show-login");
     const message = document.getElementById("message");
 
-    form.addEventListener("submit", (e) => {
+    // 表單切換
+    showRegister.addEventListener("click", () => {
+      loginForm.style.display = "none";
+      registerForm.style.display = "block";
+      message.textContent = "";
+    });
+
+    showLogin.addEventListener("click", () => {
+      registerForm.style.display = "none";
+      loginForm.style.display = "block";
+      message.textContent = "";
+    });
+
+    // 註冊事件
+    registerForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const email = document.getElementById("register-email").value;
       const password = document.getElementById("register-password").value;
 
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          message.textContent = "✅ 註冊成功！";
-          console.log("註冊成功", userCredential.user);
+          message.style.color = "green";
+          message.textContent = "註冊成功！請登入";
+          registerForm.reset();
+          showLogin.click();
         })
         .catch((error) => {
-          message.textContent = "❌ 註冊失敗：" + error.message;
-          console.error("註冊錯誤", error);
+          message.style.color = "red";
+          message.textContent = "註冊失敗：" + error.message;
+        });
+    });
+
+    // 登入事件
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          message.style.color = "green";
+          message.textContent = "登入成功，導向首頁中...";
+          loginForm.reset();
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1500);
+        })
+        .catch((error) => {
+          message.style.color = "red";
+          message.textContent = "登入失敗：" + error.message;
         });
     });
   </script>
