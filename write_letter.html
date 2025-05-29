@@ -1,86 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>寫信 - Fanverse</title>
-    <link rel="stylesheet" href="style.css">
-
-    <script type="module">
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI", // **請確認這個 API Key 是你從 Firebase Console 複製到的**
-  authDomain: "fanverse-f07eb.firebaseapp.com",
-  databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
-  projectId: "fanverse-f07eb",
-  storageBucket: "fanverse-f07eb.firebasestorage.app",
-  messagingSenderId: "352855054633",
-  appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
-  measurementId: "G-NT4NL6K2Q2"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-</script>
-    
-    
+  <meta charset="UTF-8">
+  <title>寫信 - Fanverse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <header>
-        <h1>Fanverse</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="write_letter.html">寫信</a></li>
-                <li><a href="chat.html">聊天室</a></li>
-                <li><a href="rankings.html">排行榜</a></li>
-                <li><a href="auth.html" id="login-nav-btn">登入/註冊</a></li>
-                <button id="logout-btn" style="display: none;">登出</button>
-            </ul>
-        </nav>
+  <header>
+    <h1>Fanverse</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">首頁</a></li>
+        <li><a href="write_letter.html">寫信</a></li>
+        <li><a href="chat.html">聊天室</a></li>
+        <li><a href="rankings.html">排行榜</a></li>
+        <li><a href="auth.html" id="login-nav-btn">登入/註冊</a></li>
+        <button id="logout-btn" style="display: none;">登出</button>
+      </ul>
+    </nav>
+  </header>
 
-        
-    </header>
+  <main>
+    <section id="write-letter">
+      <h2>寫信給偶像</h2>
+      <form id="letter-form">
+        <label for="recipient">收件者 (偶像):</label>
+        <input type="text" id="recipient" required>
 
-    <main>
-        <section id="write-letter">
-            <h2>寫信給偶像</h2>
-            <form id="letter-form">
-                <label for="recipient">收件者 (偶像):</label>
-                <input type="text" id="recipient" name="recipient" required>
+        <label for="title">標題:</label>
+        <input type="text" id="title" required>
 
-                <label for="title">標題:</label>
-                <input type="text" id="title" name="title" required>
+        <label for="content">內容:</label>
+        <textarea id="content" rows="10" required></textarea>
 
-                <label for="content">內容:</label>
-                <textarea id="content" name="content" rows="10" required></textarea>
+        <label>
+          <input type="checkbox" id="anonymous"> 匿名寄送
+        </label>
 
-                <label for="anonymous">
-                    <input type="checkbox" id="anonymous" name="anonymous">
-                    匿名寄送
-                </label>
+        <div id="sender-section">
+          <label for="sender">寄件人名稱（不匿名必填）:</label>
+          <input type="text" id="sender">
+        </div>
 
-                <button type="submit">送出</button>
-                <p id="status-message"></p>
-            </form>
-        </section>
-    </main>
+        <button type="submit">送出</button>
+        <p id="status-message"></p>
+      </form>
+    </section>
+  </main>
 
-    <footer>
-        <p>&copy; 2024 Fanverse. All rights reserved.</p>
-    </footer>
+  <footer>
+    <p>&copy; 2024 Fanverse. All rights reserved.</p>
+  </footer>
 
-    <script src="script.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, addDoc, collection, Timestamp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+
+    // Firebase 設定
+    const firebaseConfig = {
+      apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
+      authDomain: "fanverse-f07eb.firebaseapp.com",
+      projectId: "fanverse-f07eb",
+      storageBucket: "fanverse-f07eb.appspot.com",
+      messagingSenderId: "352855054633",
+      appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
+      measurementId: "G-NT4NL6K2Q2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("letter-form");
+    const anonymousCheckbox = document.getElementById("anonymous");
+    const senderSection = document.getElementById("sender-section");
+    const statusMessage = document.getElementById("status-message");
+
+    // 匿名切換
+    anonymousCheckbox.addEventListener("change", () => {
+      senderSection.style.display = anonymousCheckbox.checked ? "none" : "block";
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        alert("請先登入！");
+        window.location.href = "auth.html";
+        return;
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const recipient = document.getElementById("recipient").value.trim();
+        const title = document.getElementById("title").value.trim();
+        const content = document.getElementById("content").value.trim();
+        const anonymous = anonymousCheckbox.checked;
+        const sender = document.getElementById("sender").value.trim();
+
+        if (!anonymous && !sender) {
+          alert("未勾選匿名時，請輸入寄件人名稱！");
+          return;
+        }
+
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        let points = 0;
+
+        if (userSnap.exists()) {
+          points = userSnap.data().points || 0;
+        }
+
+        if (points < 100) {
+          alert("點數不足，無法寄信（需要100點）");
+          return;
+        }
+
+        // 扣點
+        await setDoc(userRef, { points: points - 100 }, { merge: true });
+
+        // 儲存信件
+        await addDoc(collection(db, "letters"), {
+          uid: user.uid,
+          title,
+          content,
+          recipient,
+          anonymous,
+          sender: anonymous ? "匿名" : sender,
+          createdAt: Timestamp.now(),
+          status: "pending" // 等待 AI 審查
+        });
+
+        statusMessage.style.color = "green";
+        statusMessage.textContent = "✅ 信件已送出，正在進行 AI 審查...";
+        form.reset();
+        senderSection.style.display = "block"; // 重設顯示
+      });
+    });
+  </script>
 </body>
-
 </html>
