@@ -21,6 +21,50 @@
     </nav>
   </header>
 
+  <!-- ✅ 加在每個 HTML 頁面的 <body> 裡合適的位置，例如 header 下方 -->
+<div id="user-info" style="display: none; padding: 1rem; background: #f0f8ff; text-align: center;">
+  歡迎，<span id="user-name"></span>！你目前有 <span id="user-points"></span> 點。
+</div>
+
+<script type="module">
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
+  authDomain: "fanverse-f07eb.firebaseapp.com",
+  databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
+  projectId: "fanverse-f07eb",
+  storageBucket: "fanverse-f07eb.appspot.com",
+  messagingSenderId: "352855054633",
+  appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
+  measurementId: "G-NT4NL6K2Q2"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const userInfoDiv = document.getElementById("user-info");
+const userNameSpan = document.getElementById("user-name");
+const userPointsSpan = document.getElementById("user-points");
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      userNameSpan.textContent = data.name || "用戶";
+      userPointsSpan.textContent = data.points ?? 0;
+      userInfoDiv.style.display = "block";
+    }
+  }
+});
+</script>
+
   <main>
     <section id="write-letter">
       <h2>寫信給偶像</h2>
