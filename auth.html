@@ -1,149 +1,162 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入 / 註冊 - Fanverse</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 2rem;
-            background: #f3f3f3;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            max-width: 400px;
-            margin: auto;
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        label {
-            display: block;
-            margin-top: 1rem;
-        }
-        input {
-            width: 100%;
-            padding: 0.5rem;
-            margin-top: 0.3rem;
-        }
-        button {
-            margin-top: 1.5rem;
-            width: 100%;
-            padding: 0.7rem;
-            background: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        p {
-            text-align: center;
-            margin-top: 1rem;
-        }
-        a {
-            color: #4a90e2;
-            cursor: pointer;
-        }
-        #message {
-            text-align: center;
-            margin-top: 1rem;
-            color: red;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>登入 / 註冊 - Fanverse</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background: #f3f3f3;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.7rem;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    p {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    a {
+      color: #4a90e2;
+      cursor: pointer;
+    }
+    #message {
+      text-align: center;
+      margin-top: 1rem;
+      color: red;
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1>Fanverse</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="write_letter.html">寫信</a></li>
-                <li><a href="chat.html">聊天室</a></li>
-                <li><a href="rankings.html">排行榜</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+  <h1>Fanverse</h1>
+  <nav>
+    <ul>
+      <li><a href="index.html">首頁</a></li>
+      <li><a href="write_letter.html">寫信</a></li>
+      <li><a href="chat.html">聊天室</a></li>
+      <li><a href="rankings.html">排行榜</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <!-- 顯示登入使用者暱稱與點數 -->
-    <div id="user-info" style="display: none; padding: 1rem; background: #f0f8ff; text-align: center;">
-      歡迎，<span id="user-name"></span>！你目前有 <span id="user-points"></span> 點。
-    </div>
+<!-- 顯示登入使用者暱稱與點數 -->
+<div id="user-info" style="display: none; padding: 1rem; background: #f0f8ff; text-align: center;">
+  歡迎，<span id="user-name"></span>！你目前有 <span id="user-points"></span> 點。
+</div>
 
-    <h1>Fanverse 登入 / 註冊</h1>
+<h1>Fanverse 登入 / 註冊</h1>
 
-    <form id="login-form">
-        <h2>登入</h2>
-        <label for="login-email">電子郵件</label>
-        <input type="email" id="login-email" required>
-        <label for="login-password">密碼</label>
-        <input type="password" id="login-password" required>
-        <button type="submit">登入</button>
-        <p>還沒有帳號？<a id="show-register-form">註冊</a></p>
-    </form>
+<form id="login-form">
+  <h2>登入</h2>
+  <label for="login-email">電子郵件</label>
+  <input type="email" id="login-email" required />
+  <label for="login-password">密碼</label>
+  <input type="password" id="login-password" required />
+  <button type="submit">登入</button>
+  <p>還沒有帳號？<a id="show-register-form">註冊</a></p>
+</form>
 
-    <form id="register-form" style="display: none;">
-        <h2>註冊</h2>
-        <label for="register-email">電子郵件</label>
-        <input type="email" id="register-email" required>
-        <label for="register-name">暱稱</label>
-        <input type="text" id="register-name" required>
-        <label for="register-password">密碼</label>
-        <input type="password" id="register-password" required>
-        <button type="submit">註冊</button>
-        <p>已有帳號？<a id="show-login-form">登入</a></p>
-    </form>
+<form id="register-form" style="display: none;">
+  <h2>註冊</h2>
+  <label for="register-email">電子郵件</label>
+  <input type="email" id="register-email" required />
+  <label for="register-name">暱稱</label>
+  <input type="text" id="register-name" required />
+  <label for="register-password">密碼</label>
+  <input type="password" id="register-password" required />
+  <button type="submit">註冊</button>
+  <p>已有帳號？<a id="show-login-form">登入</a></p>
+</form>
 
-    <p id="message"></p>
+<p id="message"></p>
 
-    <!-- 顯示使用者資訊的功能 -->
-    <script type="module">
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+<!-- Firebase 功能模組 -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
-      authDomain: "fanverse-f07eb.firebaseapp.com",
-      databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
-      projectId: "fanverse-f07eb",
-      storageBucket: "fanverse-f07eb.appspot.com",
-      messagingSenderId: "352855054633",
-      appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
-      measurementId: "G-NT4NL6K2Q2"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
+  authDomain: "fanverse-f07eb.firebaseapp.com",
+  databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
+  projectId: "fanverse-f07eb",
+  storageBucket: "fanverse-f07eb.appspot.com",
+  messagingSenderId: "352855054633",
+  appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
+  measurementId: "G-NT4NL6K2Q2"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-    const userInfoDiv = document.getElementById("user-info");
-    const userNameSpan = document.getElementById("user-name");
-    const userPointsSpan = document.getElementById("user-points");
+const userInfoDiv = document.getElementById("user-info");
+const userNameSpan = document.getElementById("user-name");
+const userPointsSpan = document.getElementById("user-points");
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
 
-        if (userSnap.exists()) {
-          const data = userSnap.data();
-          userNameSpan.textContent = data.name || "用戶";
-          userPointsSpan.textContent = data.points ?? 0;
-          userInfoDiv.style.display = "block";
-        }
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+      const lastLogin = data.lastLoginDate || "";
+      let updatedPoints = data.points ?? 0;
+
+      if (lastLogin !== today) {
+        updatedPoints += 10; // 每日登入送10點
+        await updateDoc(userRef, {
+          points: updatedPoints,
+          lastLoginDate: today
+        });
       }
-    });
-    </script>
 
-    <!-- 原本的登入註冊邏輯 -->
-    <script type="module" src="script.js"></script>
+      userNameSpan.textContent = data.name || "用戶";
+      userPointsSpan.textContent = updatedPoints;
+      userInfoDiv.style.display = "block";
+    }
+  }
+});
+</script>
+
+<!-- 原本的登入註冊邏輯 -->
+<script type="module" src="script.js"></script>
+
 </body>
 </html>
