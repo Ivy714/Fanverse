@@ -1,101 +1,293 @@
-/* 基本的 CSS 樣式，你需要根據你的設計來擴充  */
+/* reset + 背景 + 字型 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
+  font-family: sans-serif;
+  background: linear-gradient(135deg, #1a0033, #330066, #660099);
+  background-attachment: fixed;
+  color: #f0e6ff;
+  min-height: 100vh;
+  padding: 2rem;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://i.imgur.com/NWzM6lM.png') repeat;
+  opacity: 0.2;
+  z-index: -1;
 }
 
-header {
-    background-color: #f0f0f0;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* header 樣式 */
+header h1 {
+  text-align: center;
+  color: #d8b4fe;
+  text-shadow: 0 0 8px #c084fc;
+  margin-bottom: 1rem;
+}
+header nav {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.4);
+}
+header nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  flex-wrap: wrap;
+}
+header nav li {
+  margin: 0 1rem;
+}
+header nav a {
+  color: #d8b4fe;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+header nav a:hover {
+  color: #fff;
+}
+header nav button {
+  background: #a855f7;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  margin-left: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 8px #9333ea;
+  transition: all 0.3s ease;
+}
+header nav button:hover {
+  background: #9333ea;
+  box-shadow: 0 0 15px #9333ea;
 }
 
-nav ul {
-    list-style: none;
-    display: flex;
+/* 使用者資訊條 */
+#user-info {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid #a855f7;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.3);
 }
 
-nav ul li {
-    margin-right: 20px;
+/* 通用表單樣式 */
+form {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #9333ea;
+  box-shadow: 0 0 12px rgba(147, 51, 234, 0.4);
+}
+form h2 {
+  color: #d8b4fe;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 0 0 8px #c084fc;
+}
+label {
+  display: block;
+  margin-top: 1rem;
+  color: #f0e6ff;
+}
+input, textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #a855f7;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f0e6ff;
+}
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+button {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 0.7rem;
+  background: #a855f7;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #9333ea;
+  transition: all 0.3s ease;
+}
+button:hover {
+  background: #9333ea;
+  box-shadow: 0 0 20px #9333ea;
+}
+p {
+  text-align: center;
+  margin-top: 1rem;
+}
+a {
+  color: #c084fc;
+  cursor: pointer;
+  text-decoration: none;
+}
+a:hover {
+  color: #fff;
 }
 
-main {
-    padding: 20px;
+/* 聊天室 */
+#chat {
+  max-width: 600px;
+  margin: 0 auto;
 }
-
-#hero {
-    text-align: center;
-    margin-bottom: 30px;
+#room-title {
+  text-align: center;
+  color: #d8b4fe;
+  text-shadow: 0 0 8px #c084fc;
+  margin-bottom: 1rem;
 }
-
-.cta-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-#features {
-    display: flex;
-    justify-content: space-around;
-}
-
-#write-letter form {
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-#write-letter label {
-    margin-top: 10px;
-}
-
-#write-letter input, #write-letter textarea {
-    padding: 5px;
-    margin-bottom: 10px;
-}
-
 #chat-messages {
-    height: 300px;
-    overflow-y: scroll;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
+  height: 300px;
+  overflow-y: scroll;
+  border: 1px solid #9333ea;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.4);
+}
+.chat-msg {
+  margin-bottom: 0.5rem;
+  color: #f0e6ff;
+}
+.chat-msg span {
+  font-weight: bold;
+  color: #c084fc;
+  margin-right: 0.5rem;
 }
 
-#chat-form {
-    display: flex;
+/* 首頁 hero 區塊 */
+#hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #7e22ce, #a855f7);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(192, 38, 211, 0.6);
+}
+#hero h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 8px #f3e8ff;
+}
+#hero p {
+  color: #f3e8ff;
+  margin-bottom: 1.5rem;
+}
+.cta-button {
+  display: inline-block;
+  background: #9333ea;
+  color: #fff;
+  padding: 0.7rem 1.5rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 12px #9333ea;
+  transition: all 0.3s ease;
+}
+.cta-button:hover {
+  background: #a855f7;
+  box-shadow: 0 0 20px #a855f7;
 }
 
-#chat-form input {
-    flex: 1;
-    padding: 5px;
-    margin-right: 10px;
+/* 功能介紹 */
+#features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+#features div {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #9333ea;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 280px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.4);
+}
+#features h3 {
+  color: #d8b4fe;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 6px #c084fc;
+}
+#features p {
+  color: #f3e8ff;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+/* 排行榜 */
+#rankings {
+  max-width: 600px;
+  margin: 2rem auto;
+  text-align: center;
+}
+#rankings h2 {
+  color: #d8b4fe;
+  text-shadow: 0 0 8px #c084fc;
+  margin-bottom: 1rem;
+}
+#rankings table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #9333ea;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.4);
+}
+#rankings th, #rankings td {
+  padding: 0.8rem;
+  border: 1px solid #a855f7;
+  color: #f0e6ff;
+}
+#rankings th {
+  background: rgba(147, 51, 234, 0.3);
+  color: #f3e8ff;
+}
+#rankings tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
 }
 
-table th, table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
+/* 寫信頁 */
+#write-letter h2 {
+  text-align: center;
+  color: #d8b4fe;
+  text-shadow: 0 0 8px #c084fc;
+  margin-bottom: 1.5rem;
+}
+#status-message {
+  text-align: center;
+  margin-top: 1rem;
+  color: #f3e8ff;
 }
 
-table th {
-    background-color: #f0f0f0;
-}
-
+/* footer */
 footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #f0f0f0;
-    margin-top: 30px;
+  margin-top: 3rem;
+  text-align: center;
+  color: #d8b4fe;
+  font-size: 0.9rem;
 }
