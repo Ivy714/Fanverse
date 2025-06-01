@@ -6,23 +6,16 @@
 }
 body {
   font-family: sans-serif;
-  background: linear-gradient(135deg, #1a0033, #330066, #660099);
-  background-attachment: fixed;
+  background: #660099; /* 純紫色背景 */
   color: #f0e6ff;
   min-height: 100vh;
   padding: 2rem;
 }
+
 body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://th.bing.com/th/id/OIP.uJJ_D6Vx5cJ9ZzsSBUX8YwHaEo?rs=1&pid=ImgDetMain') repeat;
-  opacity: 0.2;
-  z-index: -1;
+  display: none; /* 隱藏背景圖 */
 }
+
 
 /* header 樣式 */
 header h1 {
