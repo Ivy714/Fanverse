@@ -1,72 +1,80 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>聊天室 - Fanverse</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        #chat-messages {
-            height: 300px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 1rem;
-            background: #fff;
-            margin-bottom: 1rem;
-        }
-        .chat-msg {
-            margin-bottom: 0.5rem;
-        }
-        .chat-msg span {
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>聊天室 - Fanverse</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #chat-messages {
+      height: 300px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      background: #fff;
+      margin-bottom: 1rem;
+    }
+    .chat-msg {
+      margin-bottom: 0.5rem;
+    }
+    .chat-msg span {
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Fanverse</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">首頁</a></li>
+        <li><a href="write_letter.html">寫信</a></li>
+        <li><a href="chat.html">聊天室</a></li>
+        <li><a href="rankings.html">排行榜</a></li>
+        <li><a href="auth.html" id="login-nav-btn">登入/註冊</a></li>
+        <button id="logout-btn" style="display: none;">登出</button>
+      </ul>
+    </nav>
+  </header>
 
-    <header>
-        <h1>Fanverse</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="write_letter.html">寫信</a></li>
-                <li><a href="chat.html">聊天室</a></li>
-                <li><a href="rankings.html">排行榜</a></li>
-                <li><a href="auth.html" id="login-nav-btn">登入/註冊</a></li>
-                <button id="logout-btn" style="display: none;">登出</button>
-            </ul>
-        </nav>
-    </header>
+  <div id="user-info" style="display: none; padding: 1rem; background: #f0f8ff; text-align: center;">
+    歡迎，<span id="user-name"></span>！你目前有 <span id="user-points"></span> 點。
+  </div>
 
-    <div id="user-info" style="display: none; padding: 1rem; background: #f0f8ff; text-align: center;">
-        歡迎，<span id="user-name"></span>！你目前有 <span id="user-points"></span> 點。
-    </div>
+  <main>
+    <section id="chat">
+      <h2 id="room-title">[團體名稱] - [歌曲名稱] 聊天室</h2>
+      <div id="chat-messages"></div>
+      <form id="chat-form">
+        <input type="text" id="chat-input" placeholder="輸入訊息..." required />
+        <button type="submit">送出</button>
+      </form>
+    </section>
+  </main>
 
-    <main>
-        <section id="chat">
-            <h2>[團體名稱] - [歌曲名稱] 聊天室</h2>
-            <div id="chat-messages"></div>
-            <form id="chat-form">
-                <input type="text" id="chat-input" placeholder="輸入訊息..." required>
-                <button type="submit">送出</button>
-            </form>
-        </section>
-    </main>
+  <footer>
+    <p>&copy; 2024 Fanverse. All rights reserved.</p>
+  </footer>
 
-    <footer>
-        <p>&copy; 2024 Fanverse. All rights reserved.</p>
-    </footer>
-
-    <script type="module">
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      serverTimestamp,
+      onSnapshot,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
       authDomain: "fanverse-f07eb.firebaseapp.com",
-      databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
       projectId: "fanverse-f07eb",
       storageBucket: "fanverse-f07eb.appspot.com",
       messagingSenderId: "352855054633",
@@ -84,9 +92,16 @@
     const chatMessages = document.getElementById("chat-messages");
     const chatForm = document.getElementById("chat-form");
     const chatInput = document.getElementById("chat-input");
+    const roomTitle = document.getElementById("room-title");
 
     let currentUser = null;
     let currentName = "匿名";
+
+    // 取得 URL 中的 room 參數，例如 chat.html?room=zerobaseone-seoul
+    const params = new URLSearchParams(window.location.search);
+    const room = params.get("room") || "default";
+    const roomName = room.replace(/-/g, " ").toUpperCase();
+    roomTitle.textContent = `${roomName} 聊天室`;
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -102,8 +117,8 @@
           userInfoDiv.style.display = "block";
         }
 
-        // 即時監聽聊天訊息
-        const q = query(collection(db, "chat"), orderBy("timestamp"));
+        // 即時監聽該聊天室訊息
+        const q = query(collection(db, "chatrooms", room, "messages"), orderBy("timestamp"));
         onSnapshot(q, (snapshot) => {
           chatMessages.innerHTML = "";
           snapshot.forEach(doc => {
@@ -112,9 +127,12 @@
             div.classList.add("chat-msg");
             div.innerHTML = `<span>${msg.name}：</span>${msg.text}`;
             chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
           });
+          chatMessages.scrollTop = chatMessages.scrollHeight;
         });
+      } else {
+        alert("請先登入！");
+        window.location.href = "auth.html";
       }
     });
 
@@ -123,7 +141,14 @@
       const text = chatInput.value.trim();
       if (!text || !currentUser) return;
 
-      await addDoc(collection(db, "chat"), {
+      // 模擬 AI 濾字
+      const bannedWords = ["髒話", "討厭", "死"];
+      if (bannedWords.some(w => text.includes(w))) {
+        alert("❌ 訊息包含不適當內容，請重新輸入！");
+        return;
+      }
+
+      await addDoc(collection(db, "chatrooms", room, "messages"), {
         uid: currentUser.uid,
         name: currentName,
         text,
@@ -132,6 +157,6 @@
 
       chatInput.value = "";
     });
-    </script>
+  </script>
 </body>
 </html>
