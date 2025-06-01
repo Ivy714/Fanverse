@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>寫信 - Fanverse</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
@@ -21,70 +21,30 @@
     </nav>
   </header>
 
-  <!-- ✅ 加在每個 HTML 頁面的 <body> 裡合適的位置，例如 header 下方 -->
-<div id="user-info" style="display: none; padding: 1rem; background: #f0f8ff; text-align: center;">
-  歡迎，<span id="user-name"></span>！你目前有 <span id="user-points"></span> 點。
-</div>
-
-<script type="module">
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
-  authDomain: "fanverse-f07eb.firebaseapp.com",
-  databaseURL: "https://fanverse-f07eb-default-rtdb.firebaseio.com",
-  projectId: "fanverse-f07eb",
-  storageBucket: "fanverse-f07eb.appspot.com",
-  messagingSenderId: "352855054633",
-  appId: "1:352855054633:web:35f159d6b2ccf1b423ff38",
-  measurementId: "G-NT4NL6K2Q2"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-const userInfoDiv = document.getElementById("user-info");
-const userNameSpan = document.getElementById("user-name");
-const userPointsSpan = document.getElementById("user-points");
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
-
-    if (userSnap.exists()) {
-      const data = userSnap.data();
-      userNameSpan.textContent = data.name || "用戶";
-      userPointsSpan.textContent = data.points ?? 0;
-      userInfoDiv.style.display = "block";
-    }
-  }
-});
-</script>
+  <div id="user-info" style="display: none; padding: 1rem; background: #f0f8ff; text-align: center;">
+    歡迎，<span id="user-name"></span>！你目前有 <span id="user-points"></span> 點。
+  </div>
 
   <main>
     <section id="write-letter">
       <h2>寫信給偶像</h2>
       <form id="letter-form">
         <label for="recipient">收件者 (偶像):</label>
-        <input type="text" id="recipient" required>
+        <input type="text" id="recipient" required />
 
         <label for="title">標題:</label>
-        <input type="text" id="title" required>
+        <input type="text" id="title" required />
 
         <label for="content">內容:</label>
         <textarea id="content" rows="10" required></textarea>
 
         <label>
-          <input type="checkbox" id="anonymous"> 匿名寄送
+          <input type="checkbox" id="anonymous" /> 匿名寄送
         </label>
 
         <div id="sender-section">
           <label for="sender">寄件人名稱（不匿名必填）:</label>
-          <input type="text" id="sender">
+          <input type="text" id="sender" />
         </div>
 
         <button type="submit">送出</button>
@@ -100,9 +60,16 @@ onAuthStateChanged(auth, async (user) => {
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, addDoc, collection, Timestamp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      addDoc,
+      collection,
+      Timestamp
+    } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
-    // Firebase 設定
     const firebaseConfig = {
       apiKey: "AIzaSyArhnDy_H9-nhwf3_IuesFg2leQtHTolfI",
       authDomain: "fanverse-f07eb.firebaseapp.com",
@@ -122,16 +89,31 @@ onAuthStateChanged(auth, async (user) => {
     const senderSection = document.getElementById("sender-section");
     const statusMessage = document.getElementById("status-message");
 
-    // 匿名切換
+    const userInfoDiv = document.getElementById("user-info");
+    const userNameSpan = document.getElementById("user-name");
+    const userPointsSpan = document.getElementById("user-points");
+
     anonymousCheckbox.addEventListener("change", () => {
       senderSection.style.display = anonymousCheckbox.checked ? "none" : "block";
     });
+    senderSection.style.display = anonymousCheckbox.checked ? "none" : "block";
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         alert("請先登入！");
         window.location.href = "auth.html";
         return;
+      }
+
+      // 顯示登入資訊
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      let userData = {};
+      if (userSnap.exists()) {
+        userData = userSnap.data();
+        userNameSpan.textContent = userData.name || "用戶";
+        userPointsSpan.textContent = userData.points ?? 0;
+        userInfoDiv.style.display = "block";
       }
 
       form.addEventListener("submit", async (e) => {
@@ -148,21 +130,25 @@ onAuthStateChanged(auth, async (user) => {
           return;
         }
 
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        let points = 0;
-
-        if (userSnap.exists()) {
-          points = userSnap.data().points || 0;
-        }
-
+        let points = userData.points ?? 0;
         if (points < 100) {
           alert("點數不足，無法寄信（需要100點）");
           return;
         }
 
-        // 扣點
-        await setDoc(userRef, { points: points - 100 }, { merge: true });
+        // 🧠 AI 審查模擬
+        const bannedWords = ["髒話", "討厭", "死"];
+        const containsBad = bannedWords.some(word => content.includes(word));
+        if (containsBad) {
+          statusMessage.style.color = "red";
+          statusMessage.textContent = "❌ 信件內容未通過 AI 審查，請修改後再送出。";
+          return;
+        }
+
+        // 扣點並更新畫面
+        points -= 100;
+        await setDoc(userRef, { points: points }, { merge: true });
+        userPointsSpan.textContent = points;
 
         // 儲存信件
         await addDoc(collection(db, "letters"), {
@@ -173,13 +159,13 @@ onAuthStateChanged(auth, async (user) => {
           anonymous,
           sender: anonymous ? "匿名" : sender,
           createdAt: Timestamp.now(),
-          status: "pending" // 等待 AI 審查
+          status: "pending"
         });
 
         statusMessage.style.color = "green";
         statusMessage.textContent = "✅ 信件已送出，正在進行 AI 審查...";
         form.reset();
-        senderSection.style.display = "block"; // 重設顯示
+        senderSection.style.display = "block";
       });
     });
   </script>
